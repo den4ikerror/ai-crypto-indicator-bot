@@ -1,0 +1,19 @@
+# Виключення для Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Папки віртуального середовища
+venv/
+venv_*
+/venv_311/  
+
+# Конфіденційні дані
+.env         
+*.db         
+/bot_data.db 
+*.log
+
+# Виключення для IDE (VS Code)
+.vscode/

@@ -1,0 +1,32 @@
+{
+  "1595599668": {
+    "user_id": 1595599668,
+    "username": "Den4ikError",
+    "first_name": "Den4ik",
+    "created_at": "2025-12-04T06:59:21.795378",
+    "last_seen": "2025-12-09T20:22:10.948851",
+    "plan": "starter",
+    "signals_left": 0,
+    "signals_daily": 2,
+    "signals_used_today": 1
+  },
+  "1054336105": {
+    "user_id": 1054336105,
+    "username": "wpoliqq469",
+    "first_name": "wpoliqq",
+    "created_at": "2025-12-04T07:07:51.475109",
+    "last_seen": "2025-12-04T08:07:01.917313",
+    "plan": "starter",
+    "signals_left": 0
+  },
+  "804941818": {
+    "user_id": 804941818,
+    "username": "g01nsane",
+    "first_name": "g01nsane",
+    "created_at": "2025-12-08T13:46:11.138153",
+    "last_seen": "2025-12-09T20:17:13.030083",
+    "plan": "pro",
+    "signals_daily": 5,
+    "signals_used_today": 0
+  }
+}
