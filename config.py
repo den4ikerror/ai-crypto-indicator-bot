@@ -51,13 +51,18 @@ CRYPTO_PAYMENTS = {
         'emoji': '⟠'
     },
     'monobank': {
-        'name': 'Monobank (UAH)',
+        'name': 'Monobank (банка)',
         'address': 'https://send.monobank.ua/jar/7tjdex7qHm',
         'network': 'Monobank',
         'emoji': '🏦'
+    },
+    'monobank_card': {
+        'name': 'Monobank (картка)',
+        'address': '4441 1111 3666 0614',
+        'network': 'Monobank',
+        'emoji': '💳'
     }
 }
-
 # Risk configuration
 def default_leverage_range():
     return (10, 50)
