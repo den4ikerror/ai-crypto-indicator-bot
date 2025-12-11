@@ -635,7 +635,7 @@ async def callback_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
             min_delay = 5*60
             max_delay = 60*60
             await query.edit_message_text(
-                "⏳ Сигнали шукаються...\n\n🔍 AI аналізує ринки. Сигнал буде надісланий випадково від 5 хв до 1 год.\n\n✅ Повернутись: натисніть «⬅️ Назад»",
+                "⏳ Сигнали шукаються...\n\n🔍 AI аналізує ринки. Сигнал буде надісланий протягом 1 год.\n\n✅ Повернутись: натисніть «⬅️ Назад»",
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Назад", callback_data="menu:main")]])
             )
             searching_signals.add(chat_id)
@@ -901,4 +901,5 @@ def main():
     app.run_polling()
 
 if __name__ == '__main__':
+
     main()
