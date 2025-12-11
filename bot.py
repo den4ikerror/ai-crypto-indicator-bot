@@ -500,7 +500,8 @@ async def callback_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
             kb = [
                 [InlineKeyboardButton(f"{CRYPTO_PAYMENTS['usdt']['emoji']} USDT", callback_data="crypto:usdt")],
                 [InlineKeyboardButton(f"{CRYPTO_PAYMENTS['ton']['emoji']} TON", callback_data="crypto:ton")],
-                [InlineKeyboardButton(f"{CRYPTO_PAYMENTS['monobank']['emoji']} Monobank {amount_uah} UAH", callback_data="crypto:monobank")],
+                [InlineKeyboardButton(f"{CRYPTO_PAYMENTS['monobank']['emoji']} Monobank банка {amount_uah} UAH", callback_data="crypto:monobank")],
+                [InlineKeyboardButton(f"{CRYPTO_PAYMENTS['monobank_card']['emoji']} Monobank картка {amount_uah} UAH", callback_data="crypto:monobank_card")],
                 [InlineKeyboardButton("⬅️ Назад", callback_data="menu:buy")]
             ]
             await query.edit_message_text(
@@ -523,33 +524,61 @@ async def callback_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             if crypto == 'monobank':
                 amount_uah = round(amount * USD_TO_UAH_RATE, 2)
-                crypto_info = CRYPTO_PAYMENTS[crypto]
-                wallet = crypto_info['address']
-                
+                wallet = CRYPTO_PAYMENTS[crypto]['address']
+
                 try:
                     create_payment(chat_id, plan, amount, crypto, payment_code)
                 except Exception as e:
                     logger.error(f"Payment creation error: {e}")
                     await query.edit_message_text("❌ Помилка створення платежу.", reply_markup=build_main_kb(chat_id))
                     return
-                
+
                 pending_signals[chat_id]['crypto'] = crypto
                 pending_signals[chat_id]['payment_code'] = payment_code
-                
+
                 kb = [
-                    [InlineKeyboardButton("🏦 Открыть Monobank", url=wallet)],
+                    [InlineKeyboardButton("🏦 Оплатити через Monobank банку", url=wallet)],
                     [InlineKeyboardButton("✅ Оплачено", callback_data=f"payment:confirm:{payment_code}")],
                     [InlineKeyboardButton("⬅️ Назад", callback_data="menu:buy")]
                 ]
-                
+
                 text = (
-                    f"💳 Оплата Monobank\n══════════════════════\n"
+                    f"💳 Оплата Monobank (банка)\n══════════════════════\n"
                     f"Сума: {amount_uah} ₴ (UAH)\n"
                     f"План: {plan}\n\n"
                     f"📌 Посилання відкриється в Monobank\n"
                     f"✅ Після оплати натисніть «Оплачено»"
                 )
-                
+
+                await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(kb))
+                return
+
+            elif crypto == 'monobank_card':
+                amount_uah = round(amount * USD_TO_UAH_RATE, 2)
+
+                try:
+                    create_payment(chat_id, plan, amount, crypto, payment_code)
+                except Exception as e:
+                    logger.error(f"Payment creation error: {e}")
+                    await query.edit_message_text("❌ Помилка створення платежу.", reply_markup=build_main_kb(chat_id))
+                    return
+
+                pending_signals[chat_id]['crypto'] = crypto
+                pending_signals[chat_id]['payment_code'] = payment_code
+
+                kb = [
+                    [InlineKeyboardButton("✅ Оплачено", callback_data=f"payment:confirm:{payment_code}")],
+                    [InlineKeyboardButton("⬅️ Назад", callback_data="menu:buy")]
+                ]
+
+                text = (
+                    f"💳 Оплата напряму на картку Monobank\n══════════════════════\n"
+                    f"Сума: {amount_uah} ₴ (UAH)\n"
+                    f"План: {plan}\n\n"
+                    f"📌 Реквізити картки: 4441 1111 3666 0614\n"
+                    f"✅ Після оплати натисніть «Оплачено»"
+                )
+
                 await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(kb))
                 return
             else:
@@ -635,7 +664,7 @@ async def callback_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
             min_delay = 5*60
             max_delay = 60*60
             await query.edit_message_text(
-                "⏳ Сигнали шукаються...\n\n🔍 AI аналізує ринки. Сигнал буде надісланий протягом 1 год.\n\n✅ Повернутись: натисніть «⬅️ Назад»",
+                "⏳ Сигнали шукаються...\n\n🔍 AI аналізує ринки. Сигнал буде надісланий випадково від 5 хв до 1 год.\n\n✅ Повернутись: натисніть «⬅️ Назад»",
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("⬅️ Назад", callback_data="menu:main")]])
             )
             searching_signals.add(chat_id)
@@ -901,5 +930,4 @@ def main():
     app.run_polling()
 
 if __name__ == '__main__':
-
     main()
