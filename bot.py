@@ -492,7 +492,15 @@ async def callback_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 return
             pending['term'] = term
             plan = pending['plan']
-            amount = PRICES.get(plan, 0) if term == 'month' else round(PRICES.get(plan, 0) * 10, 2)
+            if term == 'month':
+                amount = PRICES.get(plan, 0)
+            elif term == 'year':
+                if plan == 'starter':
+                    amount = 240
+                elif plan == 'pro':
+                    amount = 420
+                else:
+                    amount = 0
             pending['amount'] = amount
             
             amount_uah = round(amount * USD_TO_UAH_RATE, 2)
@@ -931,4 +939,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
